@@ -7,6 +7,9 @@ import ae.mohd874.Entity;
 import ae.mohd874.Node;
 import ae.mohd874.nodes.CircleNode;
 import ae.mohd874.nodes.RectNode;
+import ae.mohd874.scanner.DirectionalScanner;
+import ae.mohd874.scanner.RadarScanner;
+import ae.mohd874.scanner.Scanner;
 import ae.mohd874.shapes.Circle;
 import ae.mohd874.shapes.Rectangle;
 import controlP5.Accordion;
@@ -16,7 +19,6 @@ import controlP5.ControllerInterface;
 import controlP5.DropdownList;
 import controlP5.Group;
 import controlP5.Textfield;
-import controlP5.Textlabel;
 
 public class ControlPanel extends Entity
 {
@@ -60,7 +62,9 @@ public class ControlPanel extends Entity
         cpc.addController(cp5.addButton("playScene"), smBtn, scannerGroup);
         cpc.addController(cp5.addButton("stopScene"), smBtn, scannerGroup);
         cpc.linebreak();
-        cpc.addController(cp5.addButton("moveScanner"), wideBtn, scannerGroup);
+//        cpc.addController(cp5.addButton("moveScanner"), wideBtn, scannerGroup);
+        cpc.addController(cp5.addButton("addRdrScanner"), smBtn, scannerGroup);
+        cpc.addController(cp5.addButton("addDirScanner"), smBtn, scannerGroup);
         cpc.linebreak();
         cpc.addController(cp5.addTextfield("scannerAngle"), smBtn, scannerGroup);
         cpc.addController(cp5.addTextfield("scannerSize"), smBtn, scannerGroup);
@@ -90,7 +94,9 @@ public class ControlPanel extends Entity
         
         cp5.get("playScene").setCaptionLabel("play");
         cp5.get("stopScene").setCaptionLabel("stop");
-        cp5.get("moveScanner").setCaptionLabel("Move Scanner");
+//        cp5.get("moveScanner").setCaptionLabel("Move Scanner");
+        cp5.get("addRdrScanner").setCaptionLabel("R. SCNR");
+        cp5.get("addDirScanner").setCaptionLabel("D. SCNR");
         cp5.get("scannerAngle").setCaptionLabel("Angle");
         cp5.get("scannerSize").setCaptionLabel("Size");
         cp5.get("scannerSpeed").setCaptionLabel("Speed");
@@ -110,6 +116,9 @@ public class ControlPanel extends Entity
     }
     
     public void loadNodePropertiesToPanel(Node n) {
+        if(n instanceof Scanner)
+            return;
+        
         Textfield widthCtrl = cp5.get(Textfield.class, "shapeWidth");
         Textfield heightCtrl = cp5.get(Textfield.class, "shapeHeight");
         Textfield xCtrl = cp5.get(Textfield.class, "locationX");
@@ -149,6 +158,12 @@ public class ControlPanel extends Entity
         else if(eName == "addCircle"){
             addCircle();
         }
+        else if(eName == "addRdrScanner"){
+            addRdrScanner();
+        }
+        else if(eName == "addDirScanner"){
+            addDirScanner();
+        }
         else if(eName == "playScene"){
             playScene();
         }
@@ -174,12 +189,22 @@ public class ControlPanel extends Entity
 
     private void addRect() {
         Rectangle r = new Rectangle(ps, ps.mouseX, ps.mouseY, 20, 20);
-        ps.addNode(new RectNode(ps, r, ps.scanner));
+        ps.addNode(new RectNode(ps, r));
     }
     
     private void addCircle() {
         Circle r = new Circle(ps, ps.mouseX, ps.mouseY, 30);
-        ps.addNode(new CircleNode(ps, r, ps.scanner));
+        ps.addNode(new CircleNode(ps, r));
+    }
+
+    private void addRdrScanner() {
+        Scanner s = new RadarScanner(ps, ps.mouseX, ps.mouseY, 1f);
+        ps.addNode(s);
+    }
+
+    private void addDirScanner() {
+        Scanner s = new DirectionalScanner(ps, ps.mouseX, ps.mouseY, 1f, 0);
+        ps.addNode(s);
     }
     
     private void playScene() {
@@ -199,7 +224,7 @@ public class ControlPanel extends Entity
     private void stopScene() {
         ps.setPlayingState(PlayingState.STOPPED);
         cp5.getController("playScene").setCaptionLabel("Play");
-        ps.scanner.resetLoc();
+        ps.resetScannerLoc();
     }
 
     public boolean isMouseInsidePanel() {

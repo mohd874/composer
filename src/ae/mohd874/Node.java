@@ -1,5 +1,8 @@
 package ae.mohd874;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -11,9 +14,9 @@ import ddf.minim.AudioPlayer;
 
 public abstract class Node extends Entity implements ControlListener {
     public Shape          shape;
-    protected Scanner     scanner;
+//    protected Scanner     scanner;
     private boolean       isScannerIn;
-    protected PVector[]   points;
+    protected List<PVector>   points;
     protected boolean     isPlaced;
     protected boolean     isNew;
     protected boolean     isSelected;
@@ -32,19 +35,19 @@ public abstract class Node extends Entity implements ControlListener {
     }
     
     public Node(Composer ps) {
-        this(ps, null, null);
+        this(ps, null);
     }
     
-    public Node(Composer ps, Shape _s, Scanner _scanner) {
+    public Node(Composer ps, Shape _s) {
         super(ps);
         shape = _s;
-        scanner = _scanner;
+//        scanner = _scanner;
         setScannerIn(false);
         setPlaced(false);
         setNew(true);
         setSelected(false);
         initMouseDrag = false;
-        points = new PVector[0];
+        points = new ArrayList<PVector>();
         lerp = 1;
         lerpStep = 0.08f;
         color = ps.color(200,0,200);
@@ -81,9 +84,13 @@ public abstract class Node extends Entity implements ControlListener {
         
         stepLerp();
 //        updateShapeWithLerp();
-
-        points = shape.checkCollision(scanner.getLine());
-        setScannerIn((points.length > 0));
+        points.clear();
+        for(Node n : ps.nodes)
+        {
+            if(n instanceof Scanner)
+                points.addAll(shape.checkCollision(((Scanner) n).getLine()));
+        }
+        setScannerIn((points.size() > 0));
         
         if (isScannerIn() && ps.getPlayingState() == PlayingState.PLAYING) {
             playSound();

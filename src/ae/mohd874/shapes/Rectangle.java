@@ -1,10 +1,11 @@
 package ae.mohd874.shapes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import processing.core.PVector;
-import ae.mohd874.Entity;
 import ae.mohd874.Composer;
+import ae.mohd874.Entity;
 import ae.mohd874.Shape;
 import ae.mohd874.interfaces.Collidable;
 
@@ -24,7 +25,7 @@ public class Rectangle extends Entity implements Shape
     }
     
     public void display(){
-      ps.rect(x, y, w, h);
+      ps.rect(x, y, w, h, 5);
     }
     
     public float getWidth()
@@ -59,26 +60,15 @@ public class Rectangle extends Entity implements Shape
      return lines; 
     }
     
-    public PVector[] checkCollision(Collidable n)
+    public List<PVector> checkCollision(Collidable n)
     {
       ArrayList<PVector> points = new ArrayList<PVector>();
       
       for(Line line : getLines())
       {
-        PVector[] intersections = line.checkCollision(n);
-        for(PVector p : intersections)
-        {
-          points.add(p);
-        }
+        points.addAll(line.checkCollision(n));
       }
       
-      PVector[] pointsArr = new PVector[points.size()];
-      
-      for(int i=0; i < points.size(); i++)
-      {
-        pointsArr[i] = points.get(i);
-      }
-      
-      return pointsArr;
+      return points;
     }
 }

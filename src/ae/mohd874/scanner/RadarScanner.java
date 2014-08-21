@@ -30,7 +30,7 @@ public class RadarScanner extends Scanner{
         p2.y = p1.y + (size * ps.cos(rad));
         
         if (ps.getPlayingState() == PlayingState.PLAYING) {
-            angle += speed;
+            angle += getSpeed();
             if(angle >= 360)
                 angle -= 360;
         }
@@ -56,6 +56,9 @@ public class RadarScanner extends Scanner{
     
     @Override
     public void handleControlEvent(ControlEvent event) {
+        if(!isSelected)
+            return;
+        
         if (event.getName() == "moveScanner")
             moveScanner();
         else if (event.getName() == "scannerAngle") {
@@ -80,9 +83,9 @@ public class RadarScanner extends Scanner{
         }
         else if(event.getName() == "scannerSpeed") {
             Textfield tf = (Textfield) event.getController();
-            String newSize = tf.getText();
+            String newSpeed = tf.getText();
             try{
-                speed = Integer.parseInt(newSize);
+                setSpeed(Integer.parseInt(newSpeed));
             }
             catch(NumberFormatException e)
             {
@@ -97,8 +100,8 @@ public class RadarScanner extends Scanner{
     }
 
     @Override
-    public boolean isMouseIn() {
-        return false;
+    void setSpeed(float _speed) {
+        this.speed = 360/(_speed * ps.frameRate);
     }
-    
+
 }

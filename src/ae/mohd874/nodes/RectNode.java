@@ -10,9 +10,9 @@ public class RectNode extends Node
     Rectangle rect;
     Rectangle originalRect;
     
-    public RectNode(Composer ps, Rectangle _r, Scanner _scanner)
+    public RectNode(Composer ps, Rectangle _r)
     {
-      super(ps, _r, _scanner);
+      super(ps, _r);
       rect = _r;
       originalRect = new Rectangle(ps, rect.x, rect.y, rect.w, rect.h);
     }
@@ -23,7 +23,7 @@ public class RectNode extends Node
       ps.pushStyle();
       ps.stroke(204, 102, 0);
       ps.noFill();
-      ps.rect(r.x, r.y, r.w, r.h);
+      ps.rect(r.x, r.y, r.w, r.h, 5);
       ps.noStroke();
       ps.popStyle();
     }

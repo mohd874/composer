@@ -46,23 +46,25 @@ public class DirectionalScanner extends Scanner {
     }
     
     public void resetLoc() {
+        if(dir == null)
+            return;
+        
         getLine().p1.set(initX - (dir.y * (size / 2)), initY - (dir.x * (size / 2)));
         
         getLine().p2.set(initX + (dir.y * (size / 2)), initY + (dir.x * (size / 2)));
     }
     
     void setDirAngle(float deg) {
+        if(dir == null)
+            return;
         dir.set(-ps.cos(ps.radians(deg)), ps.sin(ps.radians(deg)));
     }
     
     void setAccel(float deg) {
-        accel.set(ps.cos(ps.radians(deg)) * speed, ps.sin(ps.radians(deg))
-                * speed);
-    }
-    
-    
-    public boolean isMouseIn() {
-        return false;
+        if(accel == null)
+            return;
+        accel.set(ps.cos(ps.radians(deg)) * getSpeed(), ps.sin(ps.radians(deg))
+                * getSpeed());
     }
     
     @Override
@@ -107,6 +109,11 @@ public class DirectionalScanner extends Scanner {
     @Override
     protected void updateShapeWithLerp() {
         
+    }
+
+    @Override
+    void setSpeed(float _speed) {
+        this.speed = _speed;
     }
     
 }

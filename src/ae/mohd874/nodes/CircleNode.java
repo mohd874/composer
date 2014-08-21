@@ -10,9 +10,9 @@ public class CircleNode extends Node
 {
     Circle circle;
     
-    public CircleNode(Composer ps, Circle _c, Scanner _scanner)
+    public CircleNode(Composer ps, Circle _c)
     {
-      super(ps, _c, _scanner);
+      super(ps, _c);
       circle = _c;
     }
 

@@ -1,5 +1,7 @@
 package ae.mohd874.scanner;
 
+import java.util.List;
+
 import processing.core.PVector;
 import ae.mohd874.Composer;
 import ae.mohd874.Node;
@@ -9,7 +11,7 @@ import ae.mohd874.shapes.Line;
 public abstract class Scanner extends Node implements Collidable {
 
     private Line    line;
-    float   speed;
+    protected float   speed;
     PVector loc;
     int     size;
     float   initX;
@@ -18,13 +20,11 @@ public abstract class Scanner extends Node implements Collidable {
     public Scanner(Composer ps, float _initX, float _initY, float _speed)
     {
         super(ps);
-        scanner = this;
+//        scanner = this;
         size = 80;
-        speed = _speed;
+        setSpeed(_speed);
         initX = _initX;
         initY = _initY;
-        
-        setNew(false);
         
         loc = new PVector(initX, initY);
         
@@ -39,11 +39,17 @@ public abstract class Scanner extends Node implements Collidable {
     public void update(){}
 
     public void display() {
-        ps.stroke(2);
+        ps.pushStyle();
+        if(isSelected)
+            ps.stroke(204, 102, 0);
+        else
+            ps.stroke(2);
+        
         getLine().display();
+        ps.popStyle();
     }
 
-    public PVector[] checkCollision(Collidable n) {
+    public List<PVector> checkCollision(Collidable n) {
         return getLine().checkCollision(n);
     }
     
@@ -56,4 +62,15 @@ public abstract class Scanner extends Node implements Collidable {
     public void setLine(Line line) {
         this.line = line;
     } 
+    
+    @Override
+    public boolean isMouseIn() {
+        return PVector.dist(getLine().p1, new PVector(ps.mouseX, ps.mouseY)) <= 5;
+    }
+    
+    float getSpeed() {
+        return speed;
+    }
+
+    abstract void setSpeed(float _speed);
 }

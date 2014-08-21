@@ -1,6 +1,7 @@
 package ae.mohd874.shapes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import processing.core.PVector;
 import ae.mohd874.Composer;
@@ -23,64 +24,51 @@ public class Triangle extends Entity implements Shape {
         y3 = _y3;
     }
     
-    public Triangle(Composer _ps, float _x, float _y, float _w, float _h)
-    {
-       super(_ps); 
-       w = _w;
-       h = _h;
-       x = _x;
-       y = _y;
-       
-       x1 = w/2;
-       y1 = y;
-       x2 = x;
-       y2 = y+h;
-       x3 = x+w;
-       y3 = y+h;
+    public Triangle(Composer _ps, float _x, float _y, float _w, float _h) {
+        super(_ps);
+        w = _w;
+        h = _h;
+        x = _x;
+        y = _y;
+        
+        x1 = w / 2;
+        y1 = y;
+        x2 = x;
+        y2 = y + h;
+        x3 = x + w;
+        y3 = y + h;
     }
     
     @Override
-    public PVector[] checkCollision(Collidable n) {
-      ArrayList<PVector> points = new ArrayList<PVector>();
-      
-      for(Line line : getLines())
-      {
-        PVector[] intersections = line.checkCollision(n);
-        for(PVector p : intersections)
-        {
-          points.add(p);
+    public List<PVector> checkCollision(Collidable n) {
+        ArrayList<PVector> points = new ArrayList<PVector>();
+        
+        for (Line line : getLines()) {
+            points.addAll(line.checkCollision(n));
         }
-      }
-      
-      PVector[] pointsArr = new PVector[points.size()];
-      
-      for(int i=0; i < points.size(); i++)
-      {
-        pointsArr[i] = points.get(i);
-      }
-      
-      return pointsArr;
+        
+        return points;
     }
     
-    Line[] getLines(){
-      Line[] lines = new Line[3];
-      
-      lines[0] = new Line(ps, x1, y1, x2, y2);
-      lines[1] = new Line(ps, x2, y2, x3, y3);
-      lines[2] = new Line(ps, x3, y3, x1, y1);
-     
-      return lines; 
+    Line[] getLines() {
+        Line[] lines = new Line[3];
+        
+        lines[0] = new Line(ps, x1, y1, x2, y2);
+        lines[1] = new Line(ps, x2, y2, x3, y3);
+        lines[2] = new Line(ps, x3, y3, x1, y1);
+        
+        return lines;
     }
-
+    
     @Override
     public void display() {
-       ps.triangle(x1, y1, x2, y2, x3, y3);
+        ps.triangle(x1, y1, x2, y2, x3, y3);
     }
     
     @Override
     public void setLoc(float _x, float _y) {
-       x = _x;
-       y = _y;
+        x = _x;
+        y = _y;
     }
     
     @Override

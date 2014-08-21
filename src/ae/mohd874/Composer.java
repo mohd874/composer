@@ -7,7 +7,6 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import ae.mohd874.controls.ControlPanel;
-import ae.mohd874.scanner.RadarScanner;
 import ae.mohd874.scanner.Scanner;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -19,8 +18,6 @@ public class Composer extends BaseApplet {
         PLAYING, STOPPED, PAUSED
     }
 
-    public Scanner   scanner;
-    
     private Node             selectedNode;
     
     private PlayingState   playingState;
@@ -37,6 +34,7 @@ public class Composer extends BaseApplet {
     // Construction
     public void setup() {
         size(640, 480, P3D);
+        frameRate = 60;
 //        rectMode(CENTER);
         ellipseMode(CENTER);
         
@@ -50,11 +48,11 @@ public class Composer extends BaseApplet {
 
         setPlayingState(PlayingState.STOPPED);
         
-        scanner = new RadarScanner(this, 90, 90, 1f);
-        scanner.setPlaced(true);
-        scanner.setNew(false);
-        
-        nodes.add(scanner);
+//        scanner = new RadarScanner(this, 90, 90, 1f);
+//        scanner.setPlaced(true);
+//        scanner.setNew(false);
+//        
+//        nodes.add(scanner);
         
         toBeRemoved = new ArrayList<>();
     }
@@ -162,6 +160,15 @@ public class Composer extends BaseApplet {
 
     public void deleteNode(Node node) {
         toBeRemoved.add(node);
+    }
+
+    public void resetScannerLoc() {
+        for(Node n : nodes)
+            if(n instanceof Scanner)
+            {
+                Scanner s = (Scanner) n;
+                s.resetLoc();
+            }
     }
 
 //    public void resetNodesSound() {

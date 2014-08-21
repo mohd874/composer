@@ -1,7 +1,9 @@
 package ae.mohd874.interfaces;
 
+import java.util.List;
+
 import processing.core.PVector;
 
 public interface Collidable {
-    PVector[] checkCollision(Collidable n);
+    List<PVector> checkCollision(Collidable n);
 }
